@@ -1,1 +1,1 @@
-# todoapp - Add, Delete and Update todolist
+# todoapp - Add, Delete and Update todolist app
