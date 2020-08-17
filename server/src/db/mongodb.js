@@ -36,3 +36,5 @@ mongoose.connect('mongodb://127.0.0.1:27017/todo-app', {
 // }).catch((error) => {
 //     console.log(error)
 // })
+
+module.exports = mongoose;

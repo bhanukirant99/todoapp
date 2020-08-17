@@ -35,6 +35,13 @@ class Signin extends React.Component {
       })
   }
 
+  // loadUser = () => {
+  //   fetch('http://localhost:3000/users', {
+  //     method: 'get',
+  //     headers: {'Content-Type': 'application/json'},
+  //   }).then((users) => console.log(users))
+  // }
+
   render() {
     const { onRouteChange } = this.props;
     return (

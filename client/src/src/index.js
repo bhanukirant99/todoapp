@@ -3,9 +3,9 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 // const database = require('./src/models/user');
-const User = require('./src/models/user');
-const Todo = require('./src/models/todo');
-require('./src/db/mongodb');
+const User = require('./models/user');
+const Todo = require('./models/todo');
+const mongoose = require('./db/mongodb');
 
 const app = new express();
 
@@ -36,9 +36,7 @@ app.use(cors());
 // }
 
 app.get('/', (req, res) => {
-    res.send(database);
-    console.log(database)
-
+    res.send('running')
 });
 
 app.get('/users', (req, res) => {

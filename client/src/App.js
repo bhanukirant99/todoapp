@@ -1,10 +1,18 @@
+// import User from '../../server/src/models/user';
+// import Todo from '../../server/src/models/todo';
+// import User from './src/models/user';
+// import Todo from './src/models/todo';
 import React, { Component } from 'react';
 import Particles from 'react-particles-js';
 import Navigation from './components/Navigation/Navigation';
 import Signin from './components/Signin/Signin';
 import Register from './components/Register/Register';
 import TodoApp from './components/Todo/TodoApp';
+// import axios from 'axios';
 import './App.css';
+// import mongoose from '../../server/src/db/mongodb';
+// import mongoose from './src/db/mongodb';
+
 
 const particlesOptions = {
   particles: {
@@ -27,7 +35,7 @@ class App extends Component {
       input: '',
       imageUrl: '',
       box: {},
-      route: 'home',
+      route: 'signin',
       isSignedIn: false,
       user: {
         id: '',
@@ -39,15 +47,24 @@ class App extends Component {
     }
   }
 
-  loadUser = (data) => {
+  loadUser = (user) => {
     this.setState({user: {
-      id: data.id,
-      name: data.name,
-      email: data.email,
-      entries: data.entries,
-      joined: data.joined
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      entries: user.entries,
+      joined: user.joined
     }})
+    // this.loadUser()
   }
+
+  // loadUser = () => {
+  //  axios.get('/users').then((response) => {
+  //    console.log(response.users)
+  //  }).catch((e) => {
+  //    console.log(e)
+  //  })
+  // }
 
   onInputChange = (event) => {
     this.setState({input: event.target.value});
