@@ -11,7 +11,7 @@ class TodoApp extends React.Component {
     super(props);
     // initItems(this.props.sendUser);
     this.state = {
-      items:[...this.props.sendUser.todos],
+      todos:[...this.props.sendUser.todos],
       // items:[],
 
       currentItem:{
@@ -28,7 +28,8 @@ class TodoApp extends React.Component {
   // }
 
   addItem = (e) => {
-    console.log(this.props.sendUser.id)
+    console.log(this.state.todos)
+    // console.log(this.props.sendUser.id)
     e.preventDefault();
     const newItem = this.state.currentItem;
     // console.log(this.state.currentItem)
@@ -48,10 +49,10 @@ class TodoApp extends React.Component {
           console.log(user)
         }
       })
-      const newItems = [...this.state.items, newItem];
+      const newtodos = [...this.state.todos, newItem];
     this.setState({
       // items: this.props.sendUser,
-      items: newItems,
+      todos: newtodos,
       currentItem:{
         description:'',
         completed: false
@@ -79,9 +80,9 @@ class TodoApp extends React.Component {
     console.log(this.state.currentItem.completed);
   }
 
-  checkItem = (key) => {
-    const filteredItems = this.state.items.map(item =>
-      item.key===key);
+  checkItem = (id) => {
+    const filteredItems = this.state.todos.map(todo =>
+      todo._id===id);
       const isItemChecked = true;
       if(isItemChecked) {
         // this.state.item.completed;
@@ -89,24 +90,24 @@ class TodoApp extends React.Component {
     
   }
 
-  deleteItem = (key) => {
-    const filteredItems = this.state.items.filter(item =>
-      item.key!==key);
+  deleteItem = (id) => {
+    const filteredItems = this.state.todos.filter(todo =>
+      todo._id!==id);
     this.setState({
       items: filteredItems
     })
   }
 
-  setUpdate = (text, key) => {
-    console.log(text, key)
-    const items = this.state.items;
-    items.map(item=>{      
-      if(item.key===key){
-        item.text= text;
+  setUpdate = (text, id) => {
+    console.log(text, id)
+    const todos = this.state.todos;
+    todos.map(todo=>{      
+      if(todo._id===id){
+        todo.description = text;
       }
     })
     this.setState({
-      items: items
+      todos: todos
     }) 
   }
 
@@ -122,9 +123,9 @@ class TodoApp extends React.Component {
             </input>
             <button type="submit">Add</button>
           </form>
-          <p>{this.state.items.text}</p>
+          <p>{this.state.todos.description}</p>
             <ListItems 
-              items={this.state.items}
+              todos={this.state.todos}
               completed = {false}
               handleCheck={this.handleCheck} 
               deleteItem={this.deleteItem} 

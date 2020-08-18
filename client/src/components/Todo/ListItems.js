@@ -3,10 +3,10 @@ import './ListItems.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import FlipMove from 'react-flip-move';
 
-function ListItems({items, deleteItem, setUpdate, handleCheck, completed}){
-    const listItems = items.map(item =>
+function ListItems({todos, deleteItem, setUpdate, handleCheck, completed}){
+    const listItems = todos.map(todo =>
     {
-        return <div className={`${completed === false ? "list" : "comlist"}`} key={item.id}>
+        return <div className={`${completed === false ? "list" : "comlist"}`} key={todo._id}>
         <p>
             <span>
                 <input
@@ -19,13 +19,14 @@ function ListItems({items, deleteItem, setUpdate, handleCheck, completed}){
             </span>
             <input 
                 type="text" 
-                id={item.id} value={item.description} 
+                id={todo._id} value={todo.description} 
                 onChange={(e)=>{
-                    setUpdate(e.target.value, item.id)
+                    setUpdate(e.target.value, todo._id)
                 }}/>
             <span>
                 <FontAwesomeIcon className="faicons" onClick={() => {
-                    deleteItem(item.id)
+                    deleteItem(todo._id)
+                    console.log(todo._id)
                 }} icon="trash" />
             </span>
         </p>
