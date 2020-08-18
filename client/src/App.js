@@ -8,6 +8,7 @@ import Navigation from './components/Navigation/Navigation';
 import Signin from './components/Signin/Signin';
 import Register from './components/Register/Register';
 import TodoApp from './components/Todo/TodoApp';
+import Todo from './components/Todo/Todo';
 // import axios from 'axios';
 import './App.css';
 // import mongoose from '../../server/src/db/mongodb';
@@ -31,29 +32,25 @@ class App extends Component {
     super(props);
     this.state = {
       term: "",
-      items: [],
+      todos: [],
       input: '',
-      imageUrl: '',
-      box: {},
-      route: 'signin',
+      route: 'home',
       isSignedIn: false,
       user: {
         id: '',
         name: '',
         email: '',
-        entries: 0,
-        joined: ''
+        todos: [],
       }
     }
   }
 
   loadUser = (user) => {
     this.setState({user: {
-      id: user.id,
+      id: user._id,
       name: user.name,
       email: user.email,
-      entries: user.entries,
-      joined: user.joined
+      todos: user.todos,
     }})
     // this.loadUser()
   }
@@ -92,7 +89,7 @@ class App extends Component {
               <div className="row">
                 <div className="col-md-6 mx-auto">
                   <h1 className="text-center f1 fw6 ph0 mh0">TODO LIST</h1>
-                    <TodoApp />
+                    <Todo sendUser={this.state.user.todos}/>
                 </div>
               </div>
             </div>

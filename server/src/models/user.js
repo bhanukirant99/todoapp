@@ -26,6 +26,17 @@ const User = mongoose.model('User', {
                 throw new Error('Invalid Password')
             }
         }
+    },
+    todo: {
+        description: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        completed: {
+            type: Boolean,
+            default: false
+        }
     }
 })
 

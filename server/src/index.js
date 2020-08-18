@@ -6,7 +6,7 @@ const cors = require('cors');
 const User = require('./models/user');
 const Todo = require('./models/todo');
 const mongoose = require('./db/mongodb');
-const ObjectID = require('mongodb');
+const { todoModel, userModel } = require('./models/usertodo');
 
 
 const app = new express();
@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
 
 app.get('/users', async(req, res) => {
     try {
-        const users = await User.find({})
+        const users = await userModel.find({})
         res.send(users)
     } catch (e) {
         res.status(500).send()
@@ -58,7 +58,7 @@ app.get('/users', async(req, res) => {
 app.get('/users/:id', async(req, res) => {
     const _id = req.params.id
     try {
-        const user = await User.findById(_id)
+        const user = await userModel.findById(_id)
         if(!user) {
             return res.status(404).send()
         }
@@ -80,7 +80,7 @@ app.get('/users/:id', async(req, res) => {
 
 app.get('/todos', async(req, res) => {
     try { 
-        const todos = await Todo.find({})
+        const todos = await userModel.todos.find({})
         res.send(todos)
     } catch(e) {
         res.status(500).send()
@@ -115,23 +115,23 @@ app.get('/todos/:id', async(req, res) => {
 })
 
 
-app.post('/signin', async(req, res) => {
-    const email = req.body.email
-    console.log(req.body)
-    User.findOne({email: email}).then((user) => {
-        console.log(user)
-        try {
-            if(bcrypt.compareSync(req.body.password, user.password)) {
-            // if(req.body.password === user.password) {
-                res.send(user)
-            } else {
-                res.send('Invalid password')
-            }
+// app.post('/signin', async(req, res) => {
+//     const email = req.body.email
+//     console.log(req.body)
+//     User.findOne({email: email}).then((user) => {
+//         console.log(user)
+//         try {
+//             if(bcrypt.compareSync(req.body.password, user.password)) {
+//             // if(req.body.password === user.password) {
+//                 res.send(user)
+//             } else {
+//                 res.send('Invalid password')
+//             }
             
-        } catch (e) {
-            res.status(404).send()
-        }
-    })
+//         } catch (e) {
+//             res.status(404).send()
+//         }
+//     })
     // console.log(user.mode)
     // try {
     //     if (!user) {
@@ -157,7 +157,7 @@ app.post('/signin', async(req, res) => {
     // }).catch((error) => {
     //     res.status(500).send()
     // })
-});
+// });
 
 app.get('/signin/:id', (req, res) => {
     const _id = req.params.id
@@ -198,52 +198,87 @@ app.get('/signin/:id', (req, res) => {
 //     res.json(database.users[database.length-1]);
 // });
 
+// app.post('/register', async(req, res) => {
+//    try {
+//        const hashedPassword = await bcrypt.hash(req.body.password, 10)
+//        const user = new User({
+//             name: req.body.name,
+//             email: req.body.email,
+//             password: hashedPassword
+//         })
+//        user.save()
+//        res.status(201).send(user)
+//    } catch(e) {
+//        res.status(400).send(e)
+//    }
+// //    user.save().then(() => {
+// //        res.send(user)
+// //    }).catch((error) => {
+// //        res.status(400).send(error.message)
+// //    })
+// });
+
 app.post('/register', async(req, res) => {
-   try {
-       const hashedPassword = await bcrypt.hash(req.body.password, 10)
-       const user = new User({
-            name: req.body.name,
-            email: req.body.email,
-            password: hashedPassword
-        })
-       user.save()
-       res.status(201).send(user)
-   } catch(e) {
-       res.status(400).send(e)
-   }
-//    user.save().then(() => {
-//        res.send(user)
-//    }).catch((error) => {
-//        res.status(400).send(error.message)
-//    })
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10)
+        const user = new userModel({
+             name: req.body.name,
+             email: req.body.email,
+             password: hashedPassword
+         })
+        // user.todos.push({description: req.body.description})
+        user.save()
+        res.status(201).send(user)
+    } catch(e) {
+        res.status(400).send(e)
+    }
+ });
+
+app.post('/signin', async(req, res) => {
+    const email = req.body.email
+    console.log(req.body)
+    userModel.findOne({email: email}).then((user) => {
+        console.log(user)
+        try {
+            if(bcrypt.compareSync(req.body.password, user.password)) {
+            // if(req.body.password === user.password) {
+                res.send(user)
+            } else {
+                res.send('Invalid password')
+            }
+            
+        } catch (e) {
+            res.status(404).send()
+        }
+    })
 });
 
-app.get('/profile/:id', (req, res) => {
-    const { id } = req.params;
-    let found = false;
-    database.users.forEach(user => {
-        if(user.id === id) {
-            return res.json(user);
-        }
-    });
-    if (!found) {
-        res.status(404).json('no user found!');
-    }
-});
+// app.get('/profile/:id', (req, res) => {
+//     const { id } = req.params;
+//     let found = false;
+//     database.users.forEach(user => {
+//         if(user.id === id) {
+//             return res.json(user);
+//         }
+//     });
+//     if (!found) {
+//         res.status(404).json('no user found!');
+//     }
+// });
 
-app.put('/entries', (req, res) => {
-    const { id } = req.body;
-    let found = false;
-    database.users.forEach(user => {
-        if(user.id === id) {
-            user.entries++;
-            return res.json(user.entries);
-        }
-    });
-    if (!found) {
-        res.status(404).json('no user found!');
-    }
-});
+// app.put('/entries', (req, res) => {
+//     const { id } = req.body;
+//     let found = false;
+//     database.users.forEach(user => {
+//         if(user.id === id) {
+//             user.entries++;
+//             return res.json(user.entries);
+//         }
+//     });
+//     if (!found) {
+//         res.status(404).json('no user found!');
+//     }
+// });
 
 // app.post('/addtodo', (req, res) => {
 //     const { id, todo } = req.body;
@@ -259,32 +294,114 @@ app.put('/entries', (req, res) => {
 //     }
 // });
 
+// app.post('/addtodo', (req, res) => {
+//     const todo = new Todo(req.body);
+//     todo.save().then(() => {
+//         res.send(todo)
+//     }).catch((error) => {
+//         res.status(400).send(error)
+//     })
+
+// });
+
 app.post('/addtodo', (req, res) => {
-    const todo = new Todo(req.body);
-    todo.save().then(() => {
-        res.send(todo)
-    }).catch((error) => {
-        res.status(400).send(error)
+    const todo = new todoModel(req.body);
+    console.log(todo)
+    userModel.findById(req.body.userid).then((user) => {
+        user.todos.push(todo)
+        user.save()
+        res.send(user)
+    }).catch((e) => {
+        res.send(e)
     })
+    // user.todos.push({description: req.body.description}).then(() => {
+    //     user.save().then(() => {
+    //         res.send(user)
+    //     })
+    // }).catch((error) => {
+    //     res.status(400).send(error)
+    // })
 
 });
 
 app.put('/updatetodo', (req, res) => {
-   Todo.findOneAndUpdate({description: req.body.description}, {description: req.body.updateddiscription}).then((todo) => {
-       res.send(todo)
-   }).catch((e) => {
-       res.send(e)
-   })
-});
+    userModel.find({_id: req.body.userid, "todos._id": req.body.todoid}, (err, todo) => {
+        if (err) {
+            res.send(err)
+            console.log(err)
+        } else {
+            res.send(todo)
+            console.log(todo)
+        }
+    })
+ });
 
-app.put('/deletetodo', (req, res) => {
-    Todo.findOneAndDelete({description: req.body.description}).then((todo) => {
-        console.log(todo)
-        res.send(todo)
-    }).catch((e) => {
-        res.send(e)
+ app.put('/deletetodo', (req, res) => {
+    userModel.find({todos:{"_id": req.body.todoid}}, (err, todo) => {
+        if (err) {
+            res.send(err)
+            console.log(err)
+        } else {
+            res.send(todo)
+            console.log(todo)
+        }
     })
 });
+
+
+//  const todos = user.todos.map((todos) => {
+//     // console.log(todos)
+//     return todos
+//     // todos.
+//     // if (req.body.todoid === todo._id) {
+//     //     todoid = todo._id
+//     // }
+// })
+// const todoindex = todos.map((todo) => {
+//     console.log(todo._id)
+//     if(todo._id === req.body.userid){
+//         console.log( todos.indexOf(todo))
+//     }
+// })
+// // console.log(todoindex)
+// // const todoindex = todos.indexOf()
+// // const todoid = user.todos.findById(req.body.todoid)
+// // console.log(todos)
+// user.todos.map((todo) => {
+//     // console.log(todo)
+//     if (todoid === todo._id) {
+//         todo.description = req.body.description
+//     }
+// })
+//  user.todos.findById(req.body.todoid).then((todo) => {
+//     todo.description = req.body.description
+//     res.send(user)
+// }).catch((e) => {
+//     res.send(e)
+// })
+ 
+//  user.todos.findByIdAndUpdate(req.body.todoid, { description: req.body.description }, { new: true }).then((todo) => {
+//     res.send(todo)
+// }).catch((error) => {
+//     res.send(error)
+// })
+
+// app.put('/updatetodo', (req, res) => {
+//    Todo.findOneAndUpdate({description: req.body.description}, {description: req.body.updateddiscription}).then((todo) => {
+//        res.send(todo)
+//    }).catch((e) => {
+//        res.send(e)
+//    })
+// });
+
+// app.put('/deletetodo', (req, res) => {
+//     Todo.findOneAndDelete({description: req.body.description}).then((todo) => {
+//         console.log(todo)
+//         res.send(todo)
+//     }).catch((e) => {
+//         res.send(e)
+//     })
+// });
 
 // app.post('/updatetodo', (req, res) => {
 //     const { id, otodo, ntodo } = req.body;
