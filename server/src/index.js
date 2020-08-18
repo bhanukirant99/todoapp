@@ -305,8 +305,11 @@ app.post('/signin', async(req, res) => {
 // });
 
 app.post('/addtodo', (req, res) => {
-    const todo = new todoModel(req.body);
-    console.log(todo)
+    const description = req.body.description
+    const todo = new todoModel(description);
+    console.log(description)
+    console.log(req.body)
+
     userModel.findById(req.body.userid).then((user) => {
         user.todos.push(todo)
         user.save()

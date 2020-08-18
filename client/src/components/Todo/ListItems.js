@@ -3,30 +3,29 @@ import './ListItems.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import FlipMove from 'react-flip-move';
 
-function ListItems({items, deleteItem, setUpdate}){
-    let completed = false;
+function ListItems({items, deleteItem, setUpdate, handleCheck, completed}){
     const listItems = items.map(item =>
     {
-        return <div className={`${completed === false? "list" : "comlist"}`} key={item.key}>
+        return <div className={`${completed === false ? "list" : "comlist"}`} key={item.id}>
         <p>
             <span>
                 <input
                     className="chicons" 
                     type="checkbox" 
                     onClick={() => {
-                        completed = !completed;
+                        handleCheck()
                     }}
                 />
             </span>
             <input 
                 type="text" 
-                id={item.key} value={item.text} 
+                id={item.id} value={item.description} 
                 onChange={(e)=>{
-                    setUpdate(e.target.value, item.key)
+                    setUpdate(e.target.value, item.id)
                 }}/>
             <span>
                 <FontAwesomeIcon className="faicons" onClick={() => {
-                    deleteItem(item.key)
+                    deleteItem(item.id)
                 }} icon="trash" />
             </span>
         </p>

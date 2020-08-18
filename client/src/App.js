@@ -89,7 +89,7 @@ class App extends Component {
               <div className="row">
                 <div className="col-md-6 mx-auto">
                   <h1 className="text-center f1 fw6 ph0 mh0">TODO LIST</h1>
-                    <Todo sendUser={this.state.user.todos}/>
+                    <TodoApp sendUser={this.state.user}/>
                 </div>
               </div>
             </div>
